@@ -6,5 +6,5 @@ set :public_folder, "static"
 set :views, "views"
 
 get '/' do
-	ENV["USERNAME"]
+	erb :index
 end
