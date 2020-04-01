@@ -20,17 +20,13 @@ class Game
 		@to_do[rand(0..@to_do.length - 1)]
 	end
 
-	def new_turn_name
-		@turn_name = new_card
-	end
-
 	def guessed(card)
 		@done << card 
 		@to_do.delete(card)
 	end
 
 	def pass(card)
-		@pass << card 
+		@passes << card 
 	end
 end
 
@@ -51,6 +47,11 @@ get '/guessed' do
 	redirect to '/turn'
 	else redirect to '/empty'
 	end
+end
+
+get '/pass' do 
+	game.pass(game.turn_name)
+	redirect to '/turn'
 end
 
 get '/empty' do 

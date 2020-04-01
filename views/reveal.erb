@@ -1,13 +1,30 @@
-<p>To do</p>
+<h2>Still in the hat</h2>
+
+<p>These names are in the 'to_do' array:</p>
+
+<ul>
 <% to_do.each do |name| %> 
-	<%= name %>
+	<li><%= name %></li>
 <% end %>
-<p>Done</p>
+</ul>
+
+<h2>Successfully guessed</h2>
+
+<p>These names are in the 'done' array:</p>
+
+<ul>
 <% done.each do |name| %>
-	<%= name %> 
+	<li><%= name %></li>
 <% end %>
-<p>Pass</p>
+</ul>
+
+<h2>Passes</h2>
+
+<p>These names are in the 'pases' array:</p>
+
+<ul>
 <% passes.each do |name| %>
-	<%= name %> 
+	<li><%= name %></li> 
 <% end %>
+</ul>
 
