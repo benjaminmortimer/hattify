@@ -27,7 +27,18 @@ class Game
 
 	def pass(card)
 		@passes << card 
+		@to_do.delete(card)
 	end
+
+	def reset_passes
+		@passes.each { |name| @to_do << name }
+		@passes = []
+	end
+
+	def reset_done
+		@done.each { |name| @to_do << name }
+	end
+
 end
 
 game = Game.new
@@ -51,7 +62,16 @@ end
 
 get '/pass' do 
 	game.pass(game.turn_name)
+	unless game.to_do.empty?
+	game.turn_name = game.new_card
 	redirect to '/turn'
+	else redirect to '/empty'
+	end
+end
+
+get '/next-player' do 
+	game.reset_passes
+	redirect to '/'
 end
 
 get '/empty' do 
@@ -59,8 +79,8 @@ get '/empty' do
 end
 
 get '/new-round' do 
-	game.done.each { |name| game.to_do << name }
-	game.passes.each { |name| game.to_do << name }
+	game.reset_passes
+	game.reset_done
 	redirect to '/'
 end
 
