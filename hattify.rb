@@ -14,3 +14,8 @@ post '/form' do
 	File.open("./data/data.txt", "a") { |file| file.puts(form_data) }
 	redirect to '/'
 end
+
+get '/view' do 
+	contents = File.open("./data/data.txt", "r") { |file| file.read }
+	erb :view, :locals => {:contents => contents}
+end	
