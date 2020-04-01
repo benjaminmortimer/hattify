@@ -10,7 +10,7 @@ class Game
 	attr_writer :turn_name
 
 	def initialize
-		@to_do = ["Ajit Wadekar", "Emperor Go-Saga", "Sydney Newman", "Toshiro Mifune", "Gideon Gadot"]
+		@to_do = ["Ajit Wadekar", "Emperor Go-Saga", "Sydney Newman", "Toshiro Mifune", "Gideon Gadot", "Samuel Alito", "Loris Kessel", "Daniel Paillé",  "John Abizaid", "Frederic Schwartz", "Annette O'Toole",  "Susan Boyle", "Samboy Lim", "Ding Junhui"]
 		@done = []
 		@passes = []
 		@turn_name = new_card
