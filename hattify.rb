@@ -37,6 +37,7 @@ class Game
 
 	def reset_done
 		@done.each { |name| @to_do << name }
+		@done = []
 	end
 
 end
