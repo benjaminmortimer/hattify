@@ -1,12 +1,40 @@
 require 'sinatra'
 require 'httparty'
 
-TEST_ENV_VAR = ENV['TEST_ENV_VAR']
+TRELLO_API_KEY = ENV["TRELLO_API_KEY"]
+TRELLO_API_TOKEN = ENV["TRELLO_API_TOKEN"]
+TO_DO_CARD_ID = ENV["TO_DO_CARD_ID"]
+DONE_CARD_ID = ENV["DONE_CARD_ID"]
 
 set :port, 8080
 set :static, true
 set :public_folder, "static"
 set :views, "views"
+
+class TrelloClient
+	def initialize(key, token)
+		@key = key
+		@token = token
+		@trello_api_cards_url = 'https://api.trello.com/1/cards/'
+		@auth_string = '?key=' + @key + '&token=' + @token
+	end
+
+	def read_card(card_id)
+		url = @trello_api_cards_url + card_id + @auth_string
+		HTTParty.get(url)
+	end
+
+	def write_card(card_id, new_content)
+		new_content_param = '&desc=' + new_content
+		HTTParty.put(@trello_api_cards_url + card_id + @auth_string + new_content_param)
+	end
+end
+
+trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
+
+trello_client.read_card(TO_DO_CARD_ID)
+
+trello_client.write_card(TO_DO_CARD_ID, 'A new card description')
 
 class Game
 	attr_reader :turn_name, :to_do, :done, :passes
