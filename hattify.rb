@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'httparty'
+require 'json'
 
 TRELLO_API_KEY = ENV["TRELLO_API_KEY"]
 TRELLO_API_TOKEN = ENV["TRELLO_API_TOKEN"]
@@ -21,12 +22,16 @@ class TrelloClient
 
 	def read_card(card_id)
 		url = @trello_api_cards_url + card_id + @auth_string
-		HTTParty.get(url)
+		desc = JSON.parse(HTTParty.get(url).body)['desc']
 	end
 
 	def write_card(card_id, new_content)
 		new_content_param = '&desc=' + new_content
 		HTTParty.put(@trello_api_cards_url + card_id + @auth_string + new_content_param)
+	end
+
+	def read_to_do
+		read_card(TO_DO_CARD_ID).split(',')
 	end
 end
 
@@ -34,7 +39,7 @@ class Game
 	attr_reader :turn_name, :to_do, :done, :passes
 	attr_writer :turn_name
 
-	def initialize(to_do, done)
+	def initialize(to_do)
 		@to_do = to_do
 		@done = []
 		@passes = []
@@ -77,7 +82,7 @@ end
 
 
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
-game = Game.new(trello_client.read_card(TO_DO_CARD_ID).split[','], trello_client.read_card(DONE_CARD_ID).split[','])
+game = Game.new(trello_client.read_to_do)
 
 get '/' do
 	erb :index
