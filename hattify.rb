@@ -30,12 +30,6 @@ class TrelloClient
 	end
 end
 
-trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
-
-trello_client.read_card(TO_DO_CARD_ID)
-
-trello_client.write_card(TO_DO_CARD_ID, 'A new card description')
-
 class Game
 	attr_reader :turn_name, :to_do, :done, :passes
 	attr_writer :turn_name
@@ -73,8 +67,8 @@ class Game
 
 end
 
-
 game = Game.new
+trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
 
 get '/' do
 	erb :index
@@ -104,6 +98,7 @@ end
 
 get '/next-player' do 
 	game.reset_passes
+	trello_client.write_card(TO_DO_CARD_ID, game.to_do)
 	redirect to '/'
 end
 
