@@ -1,4 +1,7 @@
 require 'sinatra'
+require 'httparty'
+
+TEST_ENV_VAR = ENV["TEST_ENV_VAR"]
 
 set :port, 8080
 set :static, true
@@ -42,10 +45,15 @@ class Game
 
 end
 
+
 game = Game.new
 
 get '/' do
-	erb :index
+	erb :index, :locals => {:test_var => TEST_ENV_VAR}
+end
+
+get '/add-names' do 
+	erb :add_names
 end
 
 get '/turn' do 
