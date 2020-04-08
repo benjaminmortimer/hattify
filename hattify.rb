@@ -49,11 +49,11 @@ end
 game = Game.new
 
 get '/' do
-	erb :index, :locals => {:test_var => TEST_ENV_VAR}
+	erb :index
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name}
+	erb :turn, :locals => {:current_name => game.turn_name, :test_var => TEST_ENV_VAR}
 end
 
 get '/guessed' do
