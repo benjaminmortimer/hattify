@@ -1,8 +1,6 @@
 require 'sinatra'
 require 'httparty'
 
-TEST_ENV_VAR = ENV['TEST_ENV_VAR']
-
 set :port, 8080
 set :static, true
 set :public_folder, "static"
@@ -53,7 +51,7 @@ get '/' do
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :test_var => TEST_ENV_VAR}
+	erb :turn, :locals => {:current_name => game.turn_name}
 end
 
 get '/guessed' do
