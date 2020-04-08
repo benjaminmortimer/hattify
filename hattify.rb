@@ -65,6 +65,10 @@ class Game
 		@done = []
 	end
 
+	def save_to_do
+		payload = to_do.join(',') 
+	end
+
 end
 
 game = Game.new
@@ -98,7 +102,7 @@ end
 
 get '/next-player' do 
 	game.reset_passes
-	trello_client.write_card(TO_DO_CARD_ID, game.to_do)
+	trello_client.write_card(TO_DO_CARD_ID, game.save_to_do)
 	redirect to '/'
 end
 
