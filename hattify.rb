@@ -34,8 +34,8 @@ class Game
 	attr_reader :turn_name, :to_do, :done, :passes
 	attr_writer :turn_name
 
-	def initialize
-		@to_do = ["Ajit Wadekar", "Emperor Go-Saga", "Sydney Newman", "Toshiro Mifune", "Gideon Gadot", "Samuel Alito", "Loris Kessel", "Daniel Paille",  "John Abizaid", "Frederic Schwartz", "Annette O'Toole",  "Susan Boyle", "Samboy Lim", "Ding Junhui"]
+	def initialize(to_do, done)
+		@to_do = to_do
 		@done = []
 		@passes = []
 		@turn_name = new_card
@@ -75,8 +75,9 @@ class Game
 
 end
 
-game = Game.new
+
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
+game = Game.new(trello_client.read_card(TO_DO_CARD_ID).split[','], trello_client.read_card(DONE_CARD_ID).split[','])
 
 get '/' do
 	erb :index
