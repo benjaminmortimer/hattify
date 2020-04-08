@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'httparty'
 
 TEST_ENV_VAR = ENV['TEST_ENV_VAR']
 
