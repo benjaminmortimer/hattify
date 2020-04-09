@@ -33,6 +33,12 @@ class TrelloClient
 	def read_to_do
 		read_card(TO_DO_CARD_ID).split(',')
 	end
+
+	def save_state(to_do_array, done_array)
+		write_card(TO_DO_CARD_ID, to_do_array.join(','))
+		write_card(DONE_CARD_ID, done_array.join(','))
+	end
+
 end
 
 class Game
@@ -112,8 +118,7 @@ end
 
 get '/next-player' do 
 	game.reset_passes
-	trello_client.write_card(TO_DO_CARD_ID, game.save_to_do)
-	trello_client.write_card(DONE_CARD_ID, game.save_done)
+	trello_client.save_state(game.to_do, game.done)
 	redirect to '/'
 end
 
