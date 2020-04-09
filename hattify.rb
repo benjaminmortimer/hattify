@@ -34,20 +34,26 @@ class TrelloClient
 		read_card(TO_DO_CARD_ID).split(',')
 	end
 
-	def save_state(to_do_array, done_array)
-		write_card(TO_DO_CARD_ID, to_do_array.join(','))
-		write_card(DONE_CARD_ID, done_array.join(','))
+	def read_done
+		read_card(DONE_CARD_ID).split(',')
 	end
 
+	def save_to_do(to_do_array)
+		write_card(TO_DO_CARD_ID, to_do_array.join(','))
+	end
+
+	def save_done(done_array)
+		write_card(DONE_CARD_ID, done_array.join(','))
+	end
 end
 
 class Game
 	attr_reader :turn_name, :to_do, :done, :passes
 	attr_writer :turn_name
 
-	def initialize(to_do)
+	def initialize(to_do, done)
 		@to_do = to_do
-		@done = []
+		@done = done
 		@passes = []
 		@turn_name = new_card
 	end
@@ -84,11 +90,16 @@ class Game
 		done.join(',')
 	end
 
+	def reload(to_do, done)
+		@to_do = to_do
+		@done = done 
+	end
+
 end
 
 
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
-game = Game.new(trello_client.read_to_do)
+game = Game.new(trello_client.read_to_do, [])
 
 get '/' do
 	erb :index
@@ -118,7 +129,9 @@ end
 
 get '/next-player' do 
 	game.reset_passes
-	trello_client.save_state(game.to_do, game.done)
+	trello_client.save_to_do(game.to_do)
+	trello_client.save_done(game.done)
+	game.reload(trello_client.read_to_do, trello_client.read_done)
 	redirect to '/'
 end
 
@@ -129,6 +142,8 @@ end
 get '/new-round' do 
 	game.reset_passes
 	game.reset_done
+	trello_client.save_to_do(game.to_do)
+	trello_client.save_done(game.done)
 	redirect to '/'
 end
 
