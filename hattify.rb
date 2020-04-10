@@ -105,15 +105,20 @@ get '/' do
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do =>game.to_do}
 end
 
 get '/guessed' do
 	game.guessed(game.turn_name)
-	unless game.to_do.empty?
+	if game.to_do.empty?
+		unless game.passes.empty?
+			redirect to '/play-pass'
+		else
+			redirect to '/empty'
+		end
+	else
 	game.turn_name = game.new_card
 	redirect to '/turn'
-	else redirect to '/empty'
 	end
 end
 
@@ -128,7 +133,7 @@ end
 
 get '/play-pass' do 
 	game.turn_name = game.passes[0]
-	game.passes.shift
+	game.reset_passes
 	redirect to '/turn'
 end
 

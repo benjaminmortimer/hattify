@@ -5,7 +5,12 @@
 <div class="controls">
 
 <p><a href="/guessed" class="hat-button-next">Got it!</a></p>
-<p><a href="/pass" class="hat-button-pass">Pass</a></p>
+
+<% unless to_do.length < 2 %>
+	<% if passes.empty? %>
+		<p><a href="/pass" class="hat-button-pass">Pass</a></p>
+	<% end %>	
+<% end %>
 
 <% unless passes.empty? %>
 
