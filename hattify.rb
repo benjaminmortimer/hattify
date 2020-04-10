@@ -97,7 +97,6 @@ class Game
 
 end
 
-
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
 game = Game.new(trello_client.read_to_do, [])
 
