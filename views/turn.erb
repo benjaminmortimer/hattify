@@ -6,6 +6,25 @@
 
 <p><a href="/guessed" class="hat-button-next">Got it!</a></p>
 <p><a href="/pass" class="hat-button-pass">Pass</a></p>
+
+<% unless passes.empty? %>
+
+<div class="passes">
+	<h2 class="hat-passes-heading">Passed</h2>
+	<% passes.each do |pass| %>
+		<div class="passed-name">
+			<p>
+				<%= pass %>
+			</p>
+			<p>
+				<a href="/play-pass">Play this name instead</a>	
+			</p>
+		</div>
+	<% end %>
+</div>
+
+<% end %>
+
 <p><a href="/next-player">Next player</a></p>
 
 </div>

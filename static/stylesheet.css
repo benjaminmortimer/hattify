@@ -22,6 +22,19 @@ body {
 	background-color: darkorange;
 }
 
+.hat-name, .passed-name {
+	border: 2px solid black;
+	padding: 15px;
+}
+
 .hat-name {
 	font-size: 44px;
+}
+
+.hat-passes-heading {
+	font-size: 24px;
+}
+
+.passed-name {
+	font-size: 20px;
 }

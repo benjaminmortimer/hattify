@@ -105,7 +105,7 @@ get '/' do
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes}
 end
 
 get '/guessed' do
@@ -124,6 +124,12 @@ get '/pass' do
 	redirect to '/turn'
 	else redirect to '/empty'
 	end
+end
+
+get '/play-pass' do 
+	game.turn_name = game.passes[0]
+	game.passes.shift
+	redirect to '/turn'
 end
 
 get '/next-player' do 
