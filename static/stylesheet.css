@@ -4,6 +4,11 @@ body {
 	margin: 15px;
 }
 
+code {
+	background-color: lightgray;
+	padding: 1px;
+}
+
 .hat-button-next, .hat-button-pass {
 	color: white;
 	display: inline-block;

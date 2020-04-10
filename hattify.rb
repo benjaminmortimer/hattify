@@ -104,6 +104,12 @@ get '/' do
 	erb :index
 end
 
+get '/add-names' do
+	erb :add_names
+end
+
+
+
 get '/turn' do 
 	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do =>game.to_do}
 end
