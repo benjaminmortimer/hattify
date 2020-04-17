@@ -155,9 +155,9 @@ get '/play-pass' do
 end
 
 get '/next-player' do 
-	game.reset
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
+	game.reset
 	game.reload(trello_client.read_to_do, trello_client.read_done)
 	redirect to '/'
 end
