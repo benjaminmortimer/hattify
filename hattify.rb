@@ -82,6 +82,14 @@ class Game
 		@done = []
 	end
 
+	def reset 
+		@passes.each { |name| @to_do << name }
+		@passes = []
+		@done.each { |name| @to_do << name }
+		@done = []
+		@turn_name = new_card
+	end
+
 	def save_to_do
 		to_do.join(',') 
 	end
@@ -144,7 +152,7 @@ get '/play-pass' do
 end
 
 get '/next-player' do 
-	game.reset_passes
+	game.reset
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
 	game.reload(trello_client.read_to_do, trello_client.read_done)
@@ -156,8 +164,7 @@ get '/empty' do
 end
 
 get '/new-round' do 
-	game.reset_passes
-	game.reset_done
+	game.reset
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
 	redirect to '/'
