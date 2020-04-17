@@ -30,6 +30,16 @@
 
 <% end %>
 
+<div class="done">
+	<h2 class="hat-done-heading">Guessed</h2>
+	<% done.each do |done_card| %>
+		<div class="hat-done-name">
+			<p>
+				<%= done_card %>
+			</p>
+		</div>
+	<% end %>
+
 <p><a href="/next-player">Next player</a></p>
 
 </div>

@@ -116,10 +116,8 @@ get '/add-names' do
 	erb :add_names
 end
 
-
-
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do =>game.to_do}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :done=> game.done}
 end
 
 get '/guessed' do

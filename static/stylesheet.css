@@ -27,6 +27,13 @@ code {
 	background-color: darkorange;
 }
 
+.hat-done-name {
+	border: 2px solid darkgray;
+	color: darkgray;
+	display: inline-block;
+	padding: 15px;
+}
+
 .hat-name, .passed-name {
 	border: 2px solid black;
 	padding: 15px;
@@ -36,7 +43,7 @@ code {
 	font-size: 44px;
 }
 
-.hat-passes-heading {
+.hat-passes-heading, .hat-done-heading {
 	font-size: 24px;
 }
 
