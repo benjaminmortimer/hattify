@@ -1,2 +1,17 @@
 <h1>The hat is empty!</h1>
-<a href="/new-round">Start a new round</a>
+
+<h2>Names you got</h2>
+
+<div class="done">
+	<% done.each do |done_card| %>
+		<div class="hat-done-name">
+			<p>
+				<%= done_card %>
+			</p>
+		</div>
+	<% end %>
+</div>
+
+<p>
+	<a class="hat-button-next" href="/new-round">Start a new round</a>
+</p>

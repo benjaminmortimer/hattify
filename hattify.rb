@@ -158,7 +158,7 @@ get '/next-player' do
 end
 
 get '/empty' do 
-	erb :empty
+	erb :empty, :locals => {:done => game.done}
 end
 
 get '/new-round' do 
