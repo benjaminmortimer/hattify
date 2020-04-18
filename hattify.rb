@@ -47,8 +47,6 @@ class TrelloClient
 	end
 end
 
-fbkjdfgbkjgdfz
-
 class Game
 	attr_reader :turn_name, :to_do, :done, :passes, :turn_done
 	attr_writer :turn_name
