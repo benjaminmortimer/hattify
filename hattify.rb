@@ -48,13 +48,14 @@ class TrelloClient
 end
 
 class Game
-	attr_reader :turn_name, :to_do, :done, :passes
+	attr_reader :turn_name, :to_do, :done, :passes, :turn_done
 	attr_writer :turn_name
 
 	def initialize(to_do, done)
 		@to_do = to_do
 		@done = done
 		@passes = []
+		@turn_done = []
 		@turn_name = new_card
 	end
 
@@ -63,6 +64,7 @@ class Game
 	end
 
 	def guessed(card)
+		@turn_done << card
 		@done << card 
 		@to_do.delete(card)
 	end
@@ -82,12 +84,17 @@ class Game
 		@done = []
 	end
 
-	def reset 
+	def new_turn
 		@passes.each { |name| @to_do << name }
 		@passes = []
-		@done.each { |name| @to_do << name }
-		@done = []
+		@turn_done = []
 		@turn_name = new_card
+	end
+
+	def new_round
+		reset_passes
+		reset_done
+		@turn_done = []
 	end
 
 	def save_to_do
@@ -117,12 +124,12 @@ get '/add-names' do
 end
 
 get '/new-turn' do 
-	game.reset
+	game.new_turn
 	redirect to '/turn'
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :done=> game.done}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :turn_done => game.turn_done}
 end
 
 get '/guessed' do
@@ -157,7 +164,7 @@ end
 get '/next-player' do 
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
-	game.reset
+	game.new_turn
 	game.reload(trello_client.read_to_do, trello_client.read_done)
 	redirect to '/'
 end
@@ -167,9 +174,9 @@ get '/empty' do
 end
 
 get '/new-round' do 
-	game.reset
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
+	game.new_round
 	redirect to '/'
 end
 
