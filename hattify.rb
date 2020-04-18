@@ -170,13 +170,13 @@ get '/next-player' do
 end
 
 get '/empty' do 
-	erb :empty, :locals => {:done => game.done}
+	erb :empty, :locals => {:turn_done => game.turn_done}
 end
 
 get '/new-round' do 
+	game.new_round
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
-	game.new_round
 	redirect to '/'
 end
 
