@@ -30,6 +30,10 @@
 
 <% end %>
 
+<p><a class="hat-button-next-player" href="/next-player">Next player</a></p>
+
+<% unless turn_done.empty? %>
+
 <div class="done">
 	<h2 class="hat-done-heading">Guessed</h2>
 	<% turn_done.each do |turn_done_card| %>
@@ -41,6 +45,6 @@
 	<% end %>
 </div>
 
-<p><a href="/next-player">Next player</a></p>
+<% end %>
 
 </div>

@@ -9,7 +9,7 @@ code {
 	padding: 1px;
 }
 
-.hat-button-next, .hat-button-pass {
+.hat-button-next, .hat-button-pass, .hat-button-next-player {
 	color: white;
 	display: inline-block;
 	font-size: 20px;
@@ -21,6 +21,10 @@ code {
 
 .hat-button-next {
 	background-color: green;
+}
+
+.hat-button-next-player {
+	background-color: blue;
 }
 
 .hat-button-pass {
