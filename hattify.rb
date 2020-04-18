@@ -162,6 +162,7 @@ get '/play-pass' do
 end
 
 get '/next-player' do 
+	game.reset_passes
 	trello_client.save_to_do(game.to_do)
 	trello_client.save_done(game.done)
 	game.new_turn
