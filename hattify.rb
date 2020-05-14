@@ -1,3 +1,4 @@
+require 'sanitize'
 require 'sinatra'
 require 'httparty'
 require 'json'
@@ -110,6 +111,16 @@ class Game
 		@done = done 
 	end
 
+	def add_name(name)
+		@to_do << name 
+	end
+
+end
+
+def clean_input(input)
+	sanitized_input = Sanitize.fragment(input)
+	sanitized_input.delete!("/.$")
+	sanitized_input 
 end
 
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
@@ -183,4 +194,18 @@ end
 
 get '/reveal' do 
 	erb :reveal, :locals => {:to_do => game.to_do, :done => game.done, :passes => game.passes}
+end
+
+get '/add-names' do
+	erb :add_names
+end
+
+post '/new-name' do
+	new_name = clean_input(params[:new_name])
+	game.add_name(new_name)
+	redirect to '/name-added'
+end
+
+get '/name-added' do 
+	erb :name_added
 end
