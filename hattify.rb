@@ -1,4 +1,6 @@
+require 'sanitize'
 require 'sinatra'
+require 'sinatra/cookies'
 require 'httparty'
 require 'json'
 
@@ -110,17 +112,34 @@ class Game
 		@done = done 
 	end
 
+	def add_name(name)
+		@to_do << name 
+	end
+
+	def add_names(names)
+		names.each do |name|
+			@to_do << name 
+		end
+	end
+
+end
+
+def clean_input(input)
+	sanitized_input = Sanitize.fragment(input)
+	sanitized_input.delete!("/.$")
+	sanitized_input 
 end
 
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
+names = {}
 game = Game.new(trello_client.read_to_do, [])
 
 get '/' do
 	erb :index
 end
 
-get '/add-names' do
-	erb :add_names
+get '/add-name-instructions' do
+	erb :add_name_instructions
 end
 
 get '/new-turn' do 
@@ -184,3 +203,50 @@ end
 get '/reveal' do 
 	erb :reveal, :locals => {:to_do => game.to_do, :done => game.done, :passes => game.passes}
 end
+
+get '/create-user' do 
+	user_id = rand(0..100).to_s 
+	loop do 
+		unless names.keys.include?(user_id)
+			cookies[:user_id] = user_id
+			names[user_id] = []
+			break
+		else
+			user_id = rand(0..100).to_s
+		end
+	end
+	redirect to('/add-names')
+end
+
+get '/add-names' do
+	user_id = clean_input(cookies[:user_id])
+	if names.keys.include?(user_id)
+		puts names 
+		erb :add_names, :locals => {:user_id => user_id, :names => names[user_id]}
+	else
+		redirect to '/create-user'
+	end
+end
+
+post '/new-name' do
+	user_id = clean_input(params[:user_id]) 
+	new_name = clean_input(params[:new_name])
+	names[user_id] << new_name
+	game.add_name(new_name)
+	redirect to '/add-names'
+end
+
+=begin 
+
+# Some draft endpoints for saving all names 
+# belonging to a user and for editing names
+
+get '/save-names' do 
+	game.add_names(names[cookies[:user_id]])
+	redirect to '/'
+end
+
+get '/edit-name' do
+	params['name_id']
+end
+=end
