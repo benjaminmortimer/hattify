@@ -1,14 +1,9 @@
 require 'sanitize'
 require 'sinatra'
-require 'httparty'
 require 'json'
 
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
-TRELLO_API_KEY = ENV["TRELLO_API_KEY"]
-TRELLO_API_TOKEN = ENV["TRELLO_API_TOKEN"]
-TO_DO_CARD_ID = ENV["TO_DO_CARD_ID"]
-DONE_CARD_ID = ENV["DONE_CARD_ID"]
 
 set :port, 8080
 set :static, true
@@ -17,41 +12,6 @@ set :views, "views"
 
 use Rack::Auth::Basic, "What's the password?" do |username, password|
   username == USERNAME and password == PASSWORD
-end
-
-class TrelloClient
-	def initialize(key, token)
-		@key = key
-		@token = token
-		@trello_api_cards_url = 'https://api.trello.com/1/cards/'
-		@auth_string = '?key=' + @key + '&token=' + @token
-	end
-
-	def read_card(card_id)
-		url = @trello_api_cards_url + card_id + @auth_string
-		desc = JSON.parse(HTTParty.get(url).body)['desc']
-	end
-
-	def write_card(card_id, new_content)
-		new_content_param = '&desc=' + new_content
-		HTTParty.put(@trello_api_cards_url + card_id + @auth_string + new_content_param)
-	end
-
-	def read_to_do
-		read_card(TO_DO_CARD_ID).split(',')
-	end
-
-	def read_done
-		read_card(DONE_CARD_ID).split(',')
-	end
-
-	def save_to_do(to_do_array)
-		write_card(TO_DO_CARD_ID, to_do_array.join(','))
-	end
-
-	def save_done(done_array)
-		write_card(DONE_CARD_ID, done_array.join(','))
-	end
 end
 
 class Game
@@ -104,19 +64,6 @@ class Game
 		@turn_done = []
 	end
 
-	def save_to_do
-		to_do.join(',') 
-	end
-
-	def save_done
-		done.join(',')
-	end
-
-	def reload(to_do, done)
-		@to_do = to_do
-		@done = done 
-	end
-
 	def add_name(name)
 		@to_do << name 
 	end
@@ -129,8 +76,7 @@ def clean_input(input)
 	sanitized_input[0..30] 
 end
 
-trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
-game = Game.new(trello_client.read_to_do, [])
+game = Game.new(["this is a name"],[])
 
 get '/' do
 	erb :index
@@ -180,10 +126,7 @@ end
 
 get '/next-player' do 
 	game.reset_passes
-	trello_client.save_to_do(game.to_do)
-	trello_client.save_done(game.done)
 	game.new_turn
-	game.reload(trello_client.read_to_do, trello_client.read_done)
 	redirect to '/'
 end
 
@@ -193,8 +136,6 @@ end
 
 get '/new-round' do 
 	game.new_round
-	trello_client.save_to_do(game.to_do)
-	trello_client.save_done(game.done)
 	redirect to '/'
 end
 
