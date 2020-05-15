@@ -23,7 +23,11 @@ class Game
 		@done = done
 		@passes = []
 		@turn_done = []
-		@turn_name = new_card
+		@turn_name
+	end
+
+	def no_names
+		[@to_do, @done, @passes].all? {|states| states.empty?}
 	end
 
 	def new_card
@@ -76,7 +80,7 @@ def clean_input(input)
 	sanitized_input[0..30] 
 end
 
-game = Game.new(["this is a name"],[])
+game = Game.new([],[])
 
 get '/' do
 	erb :index
@@ -87,8 +91,12 @@ get '/add-names' do
 end
 
 get '/new-turn' do 
+	if game.to_do.empty?
+		redirect to '/empty'
+	else
 	game.new_turn
 	redirect to '/turn'
+	end
 end
 
 get '/turn' do 
@@ -131,7 +139,7 @@ get '/next-player' do
 end
 
 get '/empty' do 
-	erb :empty, :locals => {:turn_done => game.turn_done}
+	erb :empty, :locals => {:turn_done => game.turn_done, :no_names => game.no_names}
 end
 
 get '/new-round' do 
