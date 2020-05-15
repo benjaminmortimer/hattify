@@ -18,16 +18,16 @@ class Game
 	attr_reader :turn_name, :to_do, :done, :passes, :turn_done
 	attr_writer :turn_name
 
-	def add_name(name)
-		@to_do << name 
-	end
-
 	def initialize(to_do, done)
 		@to_do = to_do
 		@done = done
 		@passes = []
 		@turn_done = []
 		@turn_name
+	end
+
+	def add_name(name)
+		@to_do << name 
 	end
 
 	def guessed(card)
