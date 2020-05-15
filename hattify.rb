@@ -3,6 +3,8 @@ require 'sinatra'
 require 'httparty'
 require 'json'
 
+USERNAME = ENV["HAT_GAME_USERNAME"]
+PASSWORD = ENV["HAT_GAME_PASSWORD"]
 TRELLO_API_KEY = ENV["TRELLO_API_KEY"]
 TRELLO_API_TOKEN = ENV["TRELLO_API_TOKEN"]
 TO_DO_CARD_ID = ENV["TO_DO_CARD_ID"]
@@ -12,6 +14,10 @@ set :port, 8080
 set :static, true
 set :public_folder, "static"
 set :views, "views"
+
+use Rack::Auth::Basic, "What's the password?" do |username, password|
+  username == USERNAME and password == PASSWORD
+end
 
 class TrelloClient
 	def initialize(key, token)
@@ -120,7 +126,7 @@ end
 def clean_input(input)
 	sanitized_input = Sanitize.fragment(input)
 	sanitized_input.delete!("/.$")
-	sanitized_input 
+	sanitized_input[0..30] 
 end
 
 trello_client = TrelloClient.new(TRELLO_API_KEY, TRELLO_API_TOKEN)
