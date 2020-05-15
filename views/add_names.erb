@@ -1,29 +1,11 @@
-<h1>How to add names to the hat</h1>
+<h2>Add a name to the hat</h2>
 
-<p>Send your names as a file attached to an email.</p>
-
-<h2>Special rules for the attachment file</h2>
-
-<p>Use a plain text editor to type the names, for example Notepad on a Windows computer or Textedit on a Mac.</p>
-
-<p>Type all the names on one line, separated by a comma with no spaces. For example:</p>
-
-<code>Ajit Wadekar,Emperor Go Saga,Sydney Newman,Toshiro Mifune,Gideon Gadot</code>
-
-<p>It's okay to have spaces as part of the names themselves.</p>
-
-<p>However, the software can't deal with anything except letters and spaces for now.</p>
-
-<h2>Save the file as a <code>.txt</code> file</h2>
-
-<p>Save the file as a <code>.txt</code> file. You can do this by giving it a name like <code>example.txt</code> when you save the file.</p> 
-
-<p>Give the file a name that noone else playing is going to give their file - for example, you could use your own name as the name of the file, like <code>ben.txt</code>.</p>
-
-<h2>Email the file</h2>
-
-<p>Send an email to me, Ben, with the file attached. I can then add all the names into the game without reading them.</p>
+<form action="/new-name" method="post">
+	<label>New name</label>
+	<input type="text" name="new_name">
+	<input type="submit" value="Add name">
+</form>
 
 <p>
-	<a href="/">Back</a>
+	<a href="/">Back to the game</a>
 </p>
