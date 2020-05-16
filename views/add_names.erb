@@ -10,11 +10,19 @@
 
 <% end %>
 
+<% if names.length < names_per_player %>
+
 <form action="/new-name" method="post">
 	<label>New name</label>
 	<input type="text" name="new_name">
 	<input type="submit" value="Add name">
 </form>
+
+<% else %>
+
+<p>You've added all <%= names_per_player %> names you're allowed to.</p>
+
+<% end %>
 
 <p>
 	<a href="/">Back to the game</a>

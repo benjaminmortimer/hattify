@@ -4,6 +4,7 @@ require 'sinatra/cookies'
 
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
+NAMES_PER_PLAYER = 5
 
 set :port, 8080
 set :static, true
@@ -90,7 +91,7 @@ get '/add-names' do
 	user_id = clean_input(cookies[:user_id])
 	if names.keys.include?(user_id)
 		puts names 
-		erb :add_names, :locals => {:names => names[user_id]}
+		erb :add_names, :locals => {:names => names[user_id], :names_per_player => NAMES_PER_PLAYER}
 	else
 		redirect to '/create-user'
 	end
