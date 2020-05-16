@@ -69,6 +69,13 @@ input[type=submit] {
 	padding: 15px;
 }
 
+.hat-draft-name {
+	border: 2px solid black;
+	display: inline-block;
+	margin: 10px 10px 10px 0;
+	padding: 15px;
+}
+
 .hat-name, .passed-name {
 	border: 2px solid black;
 	padding: 15px;

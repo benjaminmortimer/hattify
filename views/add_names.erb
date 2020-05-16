@@ -1,5 +1,15 @@
 <h2>Add a name to the hat</h2>
 
+<p>Your names:</p>
+
+<% names.each_with_index do |draft_name, i| %>
+
+<div class="hat-draft-name">
+	<p><%= draft_name %></p>
+</div>
+
+<% end %>
+
 <form action="/new-name" method="post">
 	<label>New name</label>
 	<input type="text" name="new_name">

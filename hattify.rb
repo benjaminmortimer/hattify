@@ -1,6 +1,6 @@
 require 'sanitize'
 require 'sinatra'
-require 'json'
+require 'sinatra/cookies'
 
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
@@ -80,13 +80,34 @@ def clean_input(input)
 end
 
 game = Game.new([],[])
+names = {}
 
 get '/' do
 	erb :index
 end
 
 get '/add-names' do
-	erb :add_names
+	user_id = clean_input(cookies[:user_id])
+	if names.keys.include?(user_id)
+		puts names 
+		erb :add_names, :locals => {:names => names[user_id]}
+	else
+		redirect to '/create-user'
+	end
+end
+
+get '/create-user' do 
+	user_id = rand(0..100).to_s 
+	loop do 
+		unless names.keys.include?(user_id)
+			cookies[:user_id] = user_id
+			names[user_id] = []
+			break
+		else
+			user_id = rand(0..100).to_s
+		end
+	end
+	redirect to('/add-names')
 end
 
 get '/empty' do 
@@ -113,8 +134,10 @@ end
 
 post '/new-name' do
 	new_name = clean_input(params[:new_name])
+	user_id = clean_input(cookies[:user_id]) 
 	game.add_name(new_name)
-	redirect to '/name-added'
+	names[user_id] << new_name
+	redirect to '/add-names'
 end
 
 get '/new-round' do 
