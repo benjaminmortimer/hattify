@@ -1,0 +1,23 @@
+<h2>Change a name</h2>
+
+<p>You put the name "<%= edit_name %>" in the hat. But it’s okay, you can change it.</p>
+
+<form action="/new-name" method="post">
+	<label>What do you want to change it to?</label>
+	<input type="text" name="new_name">
+	<input type="submit" value="Add name">
+</form>
+
+<h2>The other names you've added</h2>
+
+<% names.each_with_index do |draft_name, i| %>
+
+<div class="hat-draft-name">
+	<p><%= draft_name %></p>
+</div>
+
+<% end %>
+
+<p>
+	<a href="/">Back to the game</a>
+</p>

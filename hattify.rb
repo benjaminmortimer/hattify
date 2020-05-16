@@ -97,6 +97,15 @@ get '/add-names' do
 	end
 end
 
+get '/edit-name' do 
+	user_id = clean_input(cookies[:user_id])
+	name_id = clean_input(params[:name_id])
+	edit_name = names[user_id][name_id.to_i]
+	names[user_id].delete(edit_name)
+	game.to_do.delete(edit_name)
+	erb :edit_name, :locals => {:edit_name => edit_name, :names => names[user_id]}
+end
+
 get '/create-user' do 
 	user_id = rand(0..100).to_s 
 	loop do 
