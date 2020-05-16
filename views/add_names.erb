@@ -1,4 +1,12 @@
-<h2>Add a name to the hat</h2>
+<h2>
+	<% if names.length < names_per_player %>
+	Add names to the hat
+	<% else %>
+	Done
+	<% end %>
+</h2>
+
+<% unless names.empty? %>
 
 <p>Your names:</p>
 
@@ -14,6 +22,8 @@
 
 <% end %>
 
+<% end %>
+
 <% if names.length < names_per_player %>
 
 <form action="/new-name" method="post">
@@ -22,12 +32,13 @@
 	<input type="submit" value="Add name">
 </form>
 
-<% else %>
-
-<p>You've added all <%= names_per_player %> names you're allowed to.</p>
-
-<% end %>
-
 <p>
 	<a href="/">Back to the game</a>
 </p>
+
+<% else %>
+
+<p>You’ve added your <%= names_per_player %> names to the hat. You’re ready to <a href="/">start the game</a>.</p>
+
+
+<% end %>
