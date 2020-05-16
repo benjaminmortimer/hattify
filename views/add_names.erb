@@ -6,24 +6,6 @@
 	<% end %>
 </h2>
 
-<% unless names.empty? %>
-
-<p>Your names:</p>
-
-<% names.each_with_index do |draft_name, i| %>
-
-<div class="hat-draft-name">
-	<p><%= draft_name %></p>
-	<p>
-		<a href="/edit-name?name_id=<%= i %>">Edit</a>
-	</p>
-
-</div>
-
-<% end %>
-
-<% end %>
-
 <% if names.length < names_per_player %>
 
 <form action="/new-name" method="post">
@@ -40,5 +22,23 @@
 
 <p>You’ve added your <%= names_per_player %> names to the hat. You’re ready to <a href="/">start the game</a>.</p>
 
+<% end %>
+
+<% unless names.empty? %>
+
+<p>Names you've added:</p>
+
+<% names.each_with_index do |draft_name, i| %>
+
+<div class="hat-draft-name">
+	<p><%= draft_name %></p>
+	<p>
+		<a href="/edit-name?name_id=<%= i %>">Edit</a>
+	</p>
+
+</div>
 
 <% end %>
+
+<% end %>
+
