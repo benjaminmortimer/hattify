@@ -101,9 +101,18 @@ get '/edit-name' do
 	user_id = clean_input(cookies[:user_id])
 	name_id = clean_input(params[:name_id])
 	edit_name = names[user_id][name_id.to_i]
-	names[user_id].delete(edit_name)
-	game.to_do.delete(edit_name)
-	erb :edit_name, :locals => {:edit_name => edit_name, :names => names[user_id]}
+	erb :edit_name, :locals => {:edit_name => edit_name, :edit_name_id => name_id.to_i, :names => names[user_id]}
+end
+
+post '/edit-name' do
+	new_name = clean_input(params[:new_name])
+	old_name = clean_input(params[:old_name])
+	user_id = clean_input(cookies[:user_id]) 
+	game.add_name(new_name)
+	names[user_id] << new_name
+	names[user_id].delete(old_name)
+	game.to_do.delete(old_name)
+	redirect to '/add-names'
 end
 
 get '/create-user' do 
