@@ -4,7 +4,7 @@ require 'sinatra/cookies'
 
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
-NAMES_PER_PLAYER = 5
+NAMES_PER_PLAYER = 6
 
 set :port, 8080
 set :static, true
