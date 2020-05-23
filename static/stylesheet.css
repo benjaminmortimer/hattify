@@ -14,6 +14,10 @@ form {
 	padding: 10px;
 }
 
+img {
+	max-width: 100%;
+}
+
 input {
 	display: block;
 }
@@ -88,6 +92,10 @@ input[type=submit] {
 
 .hat-passes-heading, .hat-done-heading {
 	font-size: 24px;
+}
+
+.image-container {
+	max-width: 300px;
 }
 
 .passed-name {

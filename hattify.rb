@@ -1,7 +1,9 @@
+require 'net/http'
 require 'sanitize'
 require 'sinatra'
 require 'sinatra/cookies'
 
+FLICKR_API_KEY = ENV["FLICKR_API_KEY"]
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
 NAMES_PER_PLAYER = 5
@@ -13,6 +15,60 @@ set :views, "views"
 
 use Rack::Auth::Basic, "What's the password?" do |username, password|
   username == USERNAME and password == PASSWORD
+end
+
+class FlickrClient
+	def initialize(api_key)
+		@api_key = api_key
+	end
+
+	def get_request(url)
+		Net::HTTP.get(URI(url))
+	end
+
+	def build_url(base, params)
+		params_array = []
+		params.each do |key, value|
+			params_array << "#{key.to_s}=#{value.to_s}"
+		end
+		base + "?" + params_array.join("&")
+	end
+
+	def flickr_photos_search(search_term)
+		response = get_request(build_url(
+			"https://www.flickr.com/services/rest/", {
+				"api_key" => @api_key,
+				"method" => "flickr.photos.search",
+				"format" => "json",
+				"per_page" => "1",
+				"text" => search_term
+			}))
+		response.delete_prefix!("jsonFlickrApi(")
+		response.delete_suffix!(")")
+		JSON.parse(response)
+	end
+
+	def build_static_flickr_url(flickr_response)
+		photo = flickr_response["photos"]["photo"][0]
+		base = "https://farm#{photo["farm"]}.staticflickr.com/"		
+		server = photo["server"]
+		id = photo["id"]
+		secret = photo["secret"]
+		url = "#{base}#{server}/#{id}_#{secret}.jpg"
+		puts url 
+		url 
+	end
+
+	def photo_url(search_term)
+		build_static_flickr_url(flickr_photos_search(search_term))
+	end
+
+	def request_photo(search_term)
+		flickr_response = flickr_photos_search(search_term)
+		static_flickr_url = build_static_flickr_url(flickr_response)
+		get_request(static_flickr_url)
+	end
+
 end
 
 class Game
@@ -81,7 +137,12 @@ def clean_input(input)
 end
 
 game = Game.new([],[])
+flickr_client = FlickrClient.new(FLICKR_API_KEY)
 names = {}
+
+get '/photo' do 
+	erb :photo, :locals => {:photo_url => flickr_client.photo_url("flowers")}
+end
 
 get '/' do
 	erb :index
@@ -199,5 +260,6 @@ get '/reveal' do
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :turn_done => game.turn_done}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :turn_done => game.turn_done, :photo_url => flickr_client.photo_url(game.turn_name)}
 end
+
