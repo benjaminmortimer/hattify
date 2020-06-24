@@ -7,11 +7,13 @@ GEM
     multi_json (1.14.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nokogiri (1.10.9)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.9-x64-mingw32)
       mini_portile2 (~> 2.4.0)
     nokogumbo (2.0.2)
       nokogiri (~> 1.8, >= 1.8.4)
-    rack (2.2.2)
+    rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
     ruby2_keywords (0.0.2)
@@ -34,6 +36,7 @@ GEM
     tilt (2.0.10)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
