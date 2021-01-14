@@ -53,6 +53,7 @@ class Game
 		@passes.each { |name| @to_do << name }
 		@passes = []
 		@turn_done = []
+		@turn_time_remaining = TURN_LENGTH
 		@turn_name = new_card
 	end
 
