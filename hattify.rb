@@ -5,6 +5,7 @@ require 'sinatra/cookies'
 USERNAME = ENV["HAT_GAME_USERNAME"]
 PASSWORD = ENV["HAT_GAME_PASSWORD"]
 NAMES_PER_PLAYER = 8
+TURN_LENGTH = 45
 
 set :port, 8080
 set :static, true
@@ -16,7 +17,7 @@ use Rack::Auth::Basic, "What's the password?" do |username, password|
 end
 
 class Game
-	attr_reader :turn_name, :to_do, :done, :passes, :turn_done
+	attr_reader :turn_name, :to_do, :done, :passes, :turn_done, :turn_time_remaining
 	attr_writer :turn_name
 
 	def initialize(to_do, done)
@@ -25,6 +26,7 @@ class Game
 		@passes = []
 		@turn_done = []
 		@turn_name
+		@turn_time_remaining = TURN_LENGTH
 	end
 
 	def add_name(name)
@@ -71,6 +73,10 @@ class Game
 	def reset_passes
 		@passes.each { |name| @to_do << name }
 		@passes = []
+	end
+
+	def set_turn_time_remaining(time)
+		@turn_time_remaining = time
 	end
 end
 
@@ -133,8 +139,10 @@ get '/empty' do
 	erb :empty, :locals => {:turn_done => game.turn_done, :no_names => game.no_names}
 end
 
-get '/guessed' do
+get '/guessed/:time_remaining' do
 	game.guessed(game.turn_name)
+	time_remaining = clean_input(params['time_remaining'])
+	game.set_turn_time_remaining(time_remaining)
 	if game.to_do.empty?
 		unless game.passes.empty?
 			redirect to '/play-pass'
@@ -179,7 +187,9 @@ get '/next-player' do
 	redirect to '/'
 end
 
-get '/pass' do 
+get '/pass/:time_remaining' do
+	time_remaining = clean_input(params['time_remaining'])
+	game.set_turn_time_remaining(time_remaining)
 	game.pass(game.turn_name)
 	unless game.to_do.empty?
 	game.turn_name = game.new_card
@@ -188,10 +198,16 @@ get '/pass' do
 	end
 end
 
-get '/play-pass' do 
+get '/play-pass/:time_remaining' do 
+	game.guessed(game.turn_name)
+	time_remaining = clean_input(params['time_remaining'])
 	game.turn_name = game.passes[0]
 	game.reset_passes
 	redirect to '/turn'
+end
+
+get '/results' do 
+	erb :results, :locals => {:turn_done => game.turn_done}
 end
 
 get '/reveal' do 
@@ -199,5 +215,5 @@ get '/reveal' do
 end
 
 get '/turn' do 
-	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :to_do => game.to_do, :turn_done => game.turn_done}
+	erb :turn, :locals => {:current_name => game.turn_name, :passes => game.passes, :turn_time_remaining => game.turn_time_remaining, :to_do => game.to_do, :turn_done => game.turn_done}
 end

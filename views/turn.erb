@@ -1,14 +1,38 @@
+<script type="text/javascript">
+	function countdown() {
+		var guessedButton = document.getElementById('guessed-button');
+		var passButton = document.getElementById('pass-button');
+		var playPassLink = document.getElementById('play-pass-link');
+		var timer = document.getElementById('time-remaining');
+		var start = parseInt(timer.innerHTML);
+		if (start > 0) {
+			timer.innerHTML = start - 1
+			guessedButton.href = `/guessed/${start - 1}`
+		<% if passes.empty? %>
+			passButton.href = `/pass/${start - 1}`
+		<% else %>
+			playPassLink.href = `/play-pass/${start - 1}`
+		<% end %>
+		} else {
+			location = '/results';			
+		}
+	}
+	setInterval(countdown, 1000);
+</script>
+
+<p id="time-remaining"><%= turn_time_remaining %></p>
+
 <div class="current-name">
 	<p class="hat-name"><%= current_name %></p>
 </div>
 
 <div class="controls">
 
-<p><a href="/guessed" class="hat-button-next">Got it!</a></p>
+<p><a id="guessed-button" href="/guessed" class="hat-button-next">Got it!</a></p>
 
 <% unless to_do.length < 2 %>
 	<% if passes.empty? %>
-		<p><a href="/pass" class="hat-button-pass">Pass</a></p>
+		<p><a id="pass-button" href="/pass" class="hat-button-pass">Pass</a></p>
 	<% end %>	
 <% end %>
 
@@ -22,15 +46,13 @@
 				<%= pass %>
 			</p>
 			<p>
-				<a href="/play-pass">Play this name instead</a>	
+				<a id="play-pass-link" href="/play-pass">Play this name instead</a>	
 			</p>
 		</div>
 	<% end %>
 </div>
 
 <% end %>
-
-<p><a class="hat-button-next-player" href="/next-player">Next player</a></p>
 
 <% unless turn_done.empty? %>
 

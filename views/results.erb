@@ -1,0 +1,21 @@
+<h1>Time’s up!</h1>
+
+<% if turn_done.empty? %>
+<p>You didn’t score anything - but better luck next time!</p>
+
+<% else %>
+<h2>Names you got</h2>
+
+<div class="done">
+	<% turn_done.each do |done_card| %>
+		<div class="hat-done-name">
+			<p>
+				<%= done_card %>
+			</p>
+		</div>
+	<% end %>
+</div>
+
+<% end %>
+
+<p><a class="hat-button-next-player" href="/next-player">Next player</a></p>
